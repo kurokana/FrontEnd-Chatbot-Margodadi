@@ -306,21 +306,24 @@ export default function UmkmFormModal({
     formData.append('is_active', isActive ? '1' : '0')
     formData.append('is_verified', isVerified ? '1' : '0')
 
-    // Banner file (PNG, JPG, JPEG)
+    // Banner file (PNG, JPG, JPEG) or removal flag
     if (bannerFile) {
       formData.append('banner_image', bannerFile)
+      formData.append('remove_banner', '0')
+    } else if (!bannerPreview) {
+      formData.append('remove_banner', '1')
+    } else {
+      formData.append('remove_banner', '0')
     }
+
+    // Retained gallery URLs when updating (send array even if empty so backend knows all were removed)
+    formData.append('retained_gallery_urls', JSON.stringify(existingGalleryUrls))
 
     // Gallery files
     if (galleryFiles.length > 0) {
       galleryFiles.forEach((file) => {
         formData.append('gallery_images[]', file)
       })
-    }
-
-    // Retained gallery URLs when updating
-    if (existingGalleryUrls.length > 0) {
-      formData.append('retained_gallery_urls', JSON.stringify(existingGalleryUrls))
     }
 
     // Products payload
