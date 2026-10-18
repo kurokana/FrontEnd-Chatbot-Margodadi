@@ -101,6 +101,8 @@ export default function UmkmFormModal({
   const [galleryFiles, setGalleryFiles] = useState([])
   const [galleryPreviews, setGalleryPreviews] = useState([])
   const [existingGalleryUrls, setExistingGalleryUrls] = useState([])
+  const [isProcessingBanner, setIsProcessingBanner] = useState(false)
+  const [isProcessingGallery, setIsProcessingGallery] = useState(false)
 
   // Tab 5: Products Repeater
   const [products, setProducts] = useState([
@@ -190,10 +192,6 @@ export default function UmkmFormModal({
   }, [umkmData, isOpen, categories])
 
   if (!isOpen) return null
-
-  // Processing states for image compression
-  const [isProcessingBanner, setIsProcessingBanner] = useState(false)
-  const [isProcessingGallery, setIsProcessingGallery] = useState(false)
 
   // Handle Banner file change with automatic client compression
   const handleBannerChange = async (e) => {
