@@ -102,6 +102,10 @@ export default function UmkmFormModal({
   const [galleryPreviews, setGalleryPreviews] = useState([])
   const [existingGalleryUrls, setExistingGalleryUrls] = useState([])
 
+  // Keep all Hooks above the closed-modal return so opening preserves their order.
+  const [isProcessingBanner, setIsProcessingBanner] = useState(false)
+  const [isProcessingGallery, setIsProcessingGallery] = useState(false)
+
   // Tab 5: Products Repeater
   const [products, setProducts] = useState([
     { name: '', price: '', description: '', is_active: true },
@@ -190,10 +194,6 @@ export default function UmkmFormModal({
   }, [umkmData, isOpen, categories])
 
   if (!isOpen) return null
-
-  // Processing states for image compression
-  const [isProcessingBanner, setIsProcessingBanner] = useState(false)
-  const [isProcessingGallery, setIsProcessingGallery] = useState(false)
 
   // Handle Banner file change with automatic client compression
   const handleBannerChange = async (e) => {
