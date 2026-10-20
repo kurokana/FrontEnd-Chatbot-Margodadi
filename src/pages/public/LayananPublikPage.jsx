@@ -114,17 +114,15 @@ export default function LayananPublikPage() {
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
                     type="button"
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer shrink-0 ${
-                      isActive
-                        ? 'bg-primary text-on-primary shadow-xs'
-                        : 'bg-surface-container-lowest text-on-surface-variant border border-surface-container-high/60 hover:bg-surface-container'
-                    }`}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer shrink-0 ${isActive
+                      ? 'bg-primary text-on-primary shadow-xs'
+                      : 'bg-surface-container-lowest text-on-surface-variant border border-surface-container-high/60 hover:bg-surface-container'
+                      }`}
                   >
                     <span>{cat.name}</span>
                     <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                        isActive ? 'bg-white/20 text-white' : 'bg-surface-container-high text-on-surface-variant'
-                      }`}
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${isActive ? 'bg-white/20 text-white' : 'bg-surface-container-high text-on-surface-variant'
+                        }`}
                     >
                       {cat.count}
                     </span>
@@ -179,22 +177,20 @@ export default function LayananPublikPage() {
                         key={cat.id}
                         onClick={() => setSelectedCategory(cat.id)}
                         type="button"
-                        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm text-left transition-all cursor-pointer ${
-                          isActive
-                            ? 'bg-primary-container text-on-primary font-semibold shadow-xs'
-                            : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
-                        }`}
+                        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm text-left transition-all cursor-pointer ${isActive
+                          ? 'bg-primary-container text-on-primary font-semibold shadow-xs'
+                          : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
+                          }`}
                       >
                         <div className="flex items-center gap-2.5 min-w-0 pr-2">
                           <span className="material-symbols-outlined text-lg leading-none shrink-0">{iconName}</span>
                           <span className="line-clamp-1">{cat.name}</span>
                         </div>
                         <span
-                          className={`px-2 py-0.5 rounded-full text-xs shrink-0 ${
-                            isActive
-                              ? 'bg-on-primary/20 text-on-primary'
-                              : 'bg-surface-container text-on-surface-variant font-semibold'
-                          }`}
+                          className={`px-2 py-0.5 rounded-full text-xs shrink-0 ${isActive
+                            ? 'bg-on-primary/20 text-on-primary'
+                            : 'bg-surface-container text-on-surface-variant font-semibold'
+                            }`}
                         >
                           {cat.count}
                         </span>
@@ -234,14 +230,14 @@ export default function LayananPublikPage() {
                   Tidak yakin layanan yang tepat?
                 </h4>
                 <p className="text-xs text-on-primary/85 leading-relaxed">
-                  Tanyakan persyaratan, cek status nomor antrean, atau konsultasikan kebutuhan surat keluarga Anda dengan AI Virtual Guide Pekon Margodadi berbasis RAG resmi.
+                  Tanyakan persyaratan, cek status nomor antrean, atau konsultasikan kebutuhan surat keluarga Anda dengan Layanan Cerdas Pekon Margodadi.
                 </p>
                 <Link
                   to="/tanya-virtual-guide"
                   className="mt-2 inline-flex items-center justify-center gap-2 w-full bg-secondary-container hover:bg-secondary text-on-secondary py-2.5 px-4 rounded-xl text-xs font-semibold shadow-xs transition-all"
                 >
                   <span className="material-symbols-outlined text-base">forum</span>
-                  <span>Tanya Virtual Guide Sekarang</span>
+                  <span>Tanya Asisten Digital Sekarang</span>
                 </Link>
               </div>
 
@@ -351,11 +347,10 @@ export default function LayananPublikPage() {
                             {service.requirements.map((req, idx) => (
                               <li
                                 key={idx}
-                                className={`flex items-start gap-2 bg-surface-container-lowest p-3 rounded-lg shadow-2xs border border-surface-container-high/40 ${
-                                  idx === service.requirements.length - 1 && service.requirements.length % 2 !== 0
-                                    ? 'md:col-span-2'
-                                    : ''
-                                }`}
+                                className={`flex items-start gap-2 bg-surface-container-lowest p-3 rounded-lg shadow-2xs border border-surface-container-high/40 ${idx === service.requirements.length - 1 && service.requirements.length % 2 !== 0
+                                  ? 'md:col-span-2'
+                                  : ''
+                                  }`}
                               >
                                 <span className="material-symbols-outlined text-primary text-base shrink-0 mt-0.5">
                                   check_circle
@@ -397,7 +392,7 @@ export default function LayananPublikPage() {
                             className="inline-flex items-center gap-2 bg-primary hover:bg-primary-container text-on-primary px-4 py-2.5 rounded-xl text-xs font-semibold transition-all shadow-xs"
                           >
                             <span className="material-symbols-outlined text-base">smart_toy</span>
-                            <span>Konsultasikan Persyaratan Ini dengan Virtual Guide</span>
+                            <span>Konsultasikan Persyaratan Ini dengan Asisten Cerdas</span>
                           </Link>
                         </div>
                       </div>
@@ -412,9 +407,8 @@ export default function LayananPublikPage() {
                       >
                         <span>{isExpanded ? 'Tutup Persyaratan' : 'Lihat Persyaratan Lengkap'}</span>
                         <span
-                          className={`material-symbols-outlined text-base transition-transform ${
-                            isExpanded ? 'rotate-90' : ''
-                          }`}
+                          className={`material-symbols-outlined text-base transition-transform ${isExpanded ? 'rotate-90' : ''
+                            }`}
                         >
                           arrow_forward
                         </span>
