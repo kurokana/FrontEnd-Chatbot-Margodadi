@@ -18,7 +18,7 @@ export default function AdminSidebar({
       roles: ['ADMIN', 'OPERATOR'],
     },
     {
-      label: 'Percakapan (Inbox)',
+      label: 'Percakapan',
       path: '/admin/conversations',
       icon: 'forum',
       badge: hitlQueueCount > 0 ? `${hitlQueueCount} HITL` : null,
