@@ -44,7 +44,7 @@ export default function AdminSidebar({
       roles: ['ADMIN'],
     },
     {
-      label: 'Knowledge Base & Vektor AI',
+      label: 'Basis Data AI',
       path: '/admin/knowledge-base',
       icon: 'hub',
       roles: ['ADMIN'],
