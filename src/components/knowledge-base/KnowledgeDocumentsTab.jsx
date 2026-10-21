@@ -47,7 +47,7 @@ export default function KnowledgeDocumentsTab({
     {
       header: 'Dokumen & Kode',
       accessor: 'title',
-      cell: (row) => (
+      render: (row) => (
         <div className="space-y-1">
           <div className="flex items-center space-x-2">
             <span className="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
@@ -66,13 +66,14 @@ export default function KnowledgeDocumentsTab({
     {
       header: 'Domain Layanan',
       accessor: 'domain',
-      cell: (row) => getDomainBadge(row.domain),
+      render: (row) => getDomainBadge(row.domain),
     },
     {
       header: 'Potongan Vektor',
       accessor: 'chunks_count',
-      cell: (row) => (
+      render: (row) => (
         <button
+          type="button"
           onClick={() => onOpenInspector(row)}
           className="inline-flex items-center space-x-1 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-bold transition-all cursor-pointer"
         >
@@ -84,7 +85,7 @@ export default function KnowledgeDocumentsTab({
     {
       header: 'Status',
       accessor: 'is_active',
-      cell: (row) => (
+      render: (row) => (
         <span
           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold ${
             row.is_active
@@ -100,35 +101,39 @@ export default function KnowledgeDocumentsTab({
     {
       header: 'Terakhir Diperbarui',
       accessor: 'updated_at',
-      cell: (row) => <span className="text-xs text-slate-500">{row.updated_at}</span>,
+      render: (row) => <span className="text-xs text-slate-500">{row.updated_at}</span>,
     },
     {
       header: 'Aksi',
       accessor: 'actions',
-      cell: (row) => (
+      render: (row) => (
         <div className="flex items-center space-x-1.5">
           <button
+            type="button"
             onClick={() => onOpenInspector(row)}
-            title="Inspect Vector Chunks"
+            title="Lihat Potongan Vektor (Chunk Inspector)"
             className="p-1.5 rounded-lg text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-lg">visibility</span>
           </button>
           <button
+            type="button"
             onClick={() => onOpenEdit(row)}
-            title="Edit Dokumen & Sinkronisasi"
+            title="Edit Dokumen & Isi Pengetahuan"
             className="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-lg">edit</span>
           </button>
           <button
+            type="button"
             onClick={() => onReindexDoc(row.document_id)}
-            title="Re-index Chunks"
+            title="Re-index Potongan Vektor"
             className="p-1.5 rounded-lg text-slate-500 hover:text-purple-600 hover:bg-purple-50 transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-lg">autorenew</span>
           </button>
           <button
+            type="button"
             onClick={() => onDeleteDoc(row.document_id, row.title)}
             title="Hapus Dokumen"
             className="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"

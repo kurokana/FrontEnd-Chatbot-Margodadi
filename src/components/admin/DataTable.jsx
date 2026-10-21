@@ -61,7 +61,11 @@ export default function DataTable({
                       key={colIdx}
                       className={`py-3.5 px-4 align-middle ${col.cellClassName || ''}`}
                     >
-                      {col.render ? col.render(row, rowIdx) : row[col.accessor]}
+                      {col.render
+                        ? col.render(row, rowIdx)
+                        : col.cell
+                        ? col.cell(row, rowIdx)
+                        : row[col.accessor]}
                     </td>
                   ))}
                 </tr>
