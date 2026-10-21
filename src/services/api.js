@@ -43,6 +43,7 @@ api.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       localStorage.removeItem('vg_token')
       localStorage.removeItem('vg_operator')
+      localStorage.removeItem('vg_last_active_time')
       // Only redirect if inside an admin route and not already on /login
       if (window.location.pathname.startsWith('/admin') && window.location.pathname !== '/login') {
         const isIdleTimeout = error.response?.data?.code === 'IDLE_TIMEOUT'

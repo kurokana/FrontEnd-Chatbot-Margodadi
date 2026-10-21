@@ -23,6 +23,11 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, navigate])
 
+  // Bersihkan sisa timestamp inaktivitas sesi lama saat berada di halaman login
+  useEffect(() => {
+    localStorage.removeItem('vg_last_active_time')
+  }, [])
+
   const handleLogin = async (e) => {
     e.preventDefault()
     setErrorMessage('')

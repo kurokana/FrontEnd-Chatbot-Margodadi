@@ -75,6 +75,7 @@ export default function AdminLayout() {
   // Handler auto-logout saat inaktivitas > 1 jam
   const handleIdleLogout = useCallback(async () => {
     try {
+      localStorage.removeItem('vg_last_active_time')
       await logout()
     } finally {
       navigate('/login?reason=idle_timeout')
@@ -115,6 +116,7 @@ export default function AdminLayout() {
   }, [wasActiveRecently])
 
   const handleLogout = async () => {
+    localStorage.removeItem('vg_last_active_time')
     await logout()
     navigate('/login')
   }

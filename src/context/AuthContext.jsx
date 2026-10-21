@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import authService from '../services/authService'
 
 const AuthContext = createContext(null)
@@ -15,6 +15,22 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem('vg_token') || null)
   const [isLoading, setIsLoading] = useState(true)
 
+  const logout = useCallback(async () => {
+    try {
+      if (token) {
+        await authService.logout()
+      }
+    } catch {
+      // Ignore network failure on logout
+    } finally {
+      setToken(null)
+      setOperator(null)
+      localStorage.removeItem('vg_token')
+      localStorage.removeItem('vg_operator')
+      localStorage.removeItem('vg_last_active_time')
+    }
+  }, [token])
+
   useEffect(() => {
     async function verifyAuth() {
       if (token) {
@@ -24,18 +40,20 @@ export function AuthProvider({ children }) {
             setOperator(res.data.operator)
             localStorage.setItem('vg_operator', JSON.stringify(res.data.operator))
           }
-        } catch {
-          // Token invalid
-          logout()
+        } catch (err) {
+          // Token invalid or session expired
+          if (err?.response?.status === 401) {
+            logout()
+          }
         }
       }
       setIsLoading(false)
     }
 
     verifyAuth()
-  }, [token])
+  }, [token, logout])
 
-  const login = async (identifier, password) => {
+  const login = useCallback(async (identifier, password) => {
     const res = await authService.login(identifier, password)
     if (res?.data?.access_token) {
       const accessToken = res.data.access_token
@@ -45,25 +63,16 @@ export function AuthProvider({ children }) {
       setOperator(operatorData)
       localStorage.setItem('vg_token', accessToken)
       localStorage.setItem('vg_operator', JSON.stringify(operatorData))
+      localStorage.setItem('vg_last_active_time', Date.now().toString())
       return { success: true, operator: operatorData }
     }
     throw new Error(res?.message || 'Login gagal')
-  }
+  }, [])
 
-  const logout = async () => {
-    if (token) {
-      await authService.logout()
-    }
-    setToken(null)
-    setOperator(null)
-    localStorage.removeItem('vg_token')
-    localStorage.removeItem('vg_operator')
-  }
-
-  const updateOperator = (newOperatorData) => {
+  const updateOperator = useCallback((newOperatorData) => {
     setOperator(newOperatorData)
     localStorage.setItem('vg_operator', JSON.stringify(newOperatorData))
-  }
+  }, [])
 
   return (
     <AuthContext.Provider

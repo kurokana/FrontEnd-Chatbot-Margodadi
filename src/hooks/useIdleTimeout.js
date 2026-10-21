@@ -29,6 +29,16 @@ export function useIdleTimeout({
   const lastActivityRef = useRef(Date.now())
   const lastThrottleRef = useRef(0)
   const isWarningRef = useRef(false)
+  const onLogoutRef = useRef(onLogout)
+  const onStayLoggedInRef = useRef(onStayLoggedIn)
+
+  useEffect(() => {
+    onLogoutRef.current = onLogout
+  }, [onLogout])
+
+  useEffect(() => {
+    onStayLoggedInRef.current = onStayLoggedIn
+  }, [onStayLoggedIn])
 
   // Inisialisasi timestamp di localStorage jika belum ada
   useEffect(() => {
@@ -42,7 +52,8 @@ export function useIdleTimeout({
       if (!isNaN(parsed) && parsed > 0 && parsed <= now) {
         // Jika sudah melewati batas timeout saat halaman pertama kali dimuat
         if (now - parsed >= timeoutMs) {
-          onLogout?.()
+          localStorage.removeItem(STORAGE_KEY_LAST_ACTIVE)
+          onLogoutRef.current?.()
           return
         }
         lastActivityRef.current = parsed
@@ -54,7 +65,7 @@ export function useIdleTimeout({
       localStorage.setItem(STORAGE_KEY_LAST_ACTIVE, now.toString())
       lastActivityRef.current = now
     }
-  }, [enabled, timeoutMs, onLogout])
+  }, [enabled, timeoutMs])
 
   // Fungsi untuk mencatat aktivitas pengguna secara ter-throttle
   const recordActivity = useCallback(() => {
@@ -79,10 +90,10 @@ export function useIdleTimeout({
     setIsWarningVisible(false)
     setRemainingSeconds(Math.floor(warningMs / 1000))
 
-    if (onStayLoggedIn) {
-      onStayLoggedIn()
+    if (onStayLoggedInRef.current) {
+      onStayLoggedInRef.current()
     }
-  }, [warningMs, onStayLoggedIn])
+  }, [warningMs])
 
   // Periksa apakah pengguna aktif dalam rentang waktu tertentu (misal 5 menit terakhir untuk heartbeat)
   const wasActiveRecently = useCallback((withinMs = 5 * 60 * 1000) => {
@@ -131,7 +142,7 @@ export function useIdleTimeout({
 
       // Jika token dihapus di tab lain (logout dari tab lain), logout tab ini juga
       if (e.key === 'vg_token' && !e.newValue) {
-        onLogout?.()
+        onLogoutRef.current?.()
       }
     }
 
@@ -139,7 +150,7 @@ export function useIdleTimeout({
     return () => {
       window.removeEventListener('storage', handleStorageChange)
     }
-  }, [enabled, timeoutMs, warningMs, onLogout])
+  }, [enabled, timeoutMs, warningMs])
 
   // Loop evaluasi inaktivitas setiap 1 detik
   useEffect(() => {
@@ -154,7 +165,8 @@ export function useIdleTimeout({
         isWarningRef.current = false
         setIsWarningVisible(false)
         clearInterval(checkInterval)
-        onLogout?.()
+        localStorage.removeItem(STORAGE_KEY_LAST_ACTIVE)
+        onLogoutRef.current?.()
         return
       }
 
@@ -173,7 +185,7 @@ export function useIdleTimeout({
     return () => {
       clearInterval(checkInterval)
     }
-  }, [enabled, timeoutMs, warningMs, onLogout])
+  }, [enabled, timeoutMs, warningMs])
 
   return {
     isWarningVisible,
