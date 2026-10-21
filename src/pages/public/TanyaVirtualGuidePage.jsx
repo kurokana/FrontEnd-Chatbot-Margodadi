@@ -4,6 +4,7 @@ import chatbotService from '../../services/chatbotService'
 import ChatHeader from '../../components/chat/ChatHeader'
 import ChatMessageFeed from '../../components/chat/ChatMessageFeed'
 import ChatInputBar from '../../components/chat/ChatInputBar'
+import { formatWIB } from '../../utils/dateUtils'
 
 // Lazy load drawers & modals
 const RagContextDrawer = lazy(() => import('../../components/chat/RagContextDrawer'))
@@ -132,8 +133,7 @@ export default function TanyaVirtualGuidePage() {
     const text = (textToSend || inputText).trim()
     if (!text) return
 
-    const now = new Date()
-    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} WIB`
+    const currentTime = formatWIB(new Date(), 'time')
 
     const userMessage = {
       id: getNextId('usr'),

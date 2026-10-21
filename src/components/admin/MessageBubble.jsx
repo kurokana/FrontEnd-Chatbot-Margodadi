@@ -1,5 +1,7 @@
+import { formatWIB } from '../../utils/dateUtils'
+
 export default function MessageBubble({ message }) {
-  const { sender, senderName, content, timestamp, isSystemAlert } = message
+  const { sender, senderName, content, timestamp, created_at, isSystemAlert } = message
 
   if (isSystemAlert) {
     return (
@@ -43,7 +45,9 @@ export default function MessageBubble({ message }) {
             <span className="text-sky-700 font-bold">{senderName || 'Operator'}</span>
           </>
         )}
-        <span className="text-slate-400 font-normal">· {timestamp}</span>
+        <span className="text-slate-400 font-normal">
+          · {created_at ? formatWIB(created_at, 'time') : (timestamp?.includes('WIB') ? timestamp : `${timestamp} WIB`)}
+        </span>
       </div>
 
       {/* Bubble Body */}

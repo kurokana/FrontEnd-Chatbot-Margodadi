@@ -45,7 +45,9 @@ api.interceptors.response.use(
       localStorage.removeItem('vg_operator')
       // Only redirect if inside an admin route and not already on /login
       if (window.location.pathname.startsWith('/admin') && window.location.pathname !== '/login') {
-        window.location.href = '/login'
+        const isIdleTimeout = error.response?.data?.code === 'IDLE_TIMEOUT'
+        const reason = isIdleTimeout ? 'idle_timeout' : 'session_expired'
+        window.location.href = `/login?reason=${reason}`
       }
     }
     return Promise.reject(error)

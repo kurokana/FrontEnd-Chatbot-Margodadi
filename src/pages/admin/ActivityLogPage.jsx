@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import DataTable from '../../components/admin/DataTable'
 import Pagination from '../../components/admin/Pagination'
 import activityLogService from '../../services/activityLogService'
+import { formatWIB } from '../../utils/dateUtils'
 
 export default function ActivityLogPage() {
   const [logs, setLogs] = useState([])
@@ -166,9 +167,11 @@ export default function ActivityLogPage() {
           <span className="material-symbols-outlined text-slate-400 text-sm">schedule</span>
           <div className="flex flex-col">
             <span className="font-mono text-xs text-slate-800 font-semibold">
-              {row.timestamp} WIB
+              {row.created_at ? formatWIB(row.created_at, 'time') : `${row.timestamp} WIB`}
             </span>
-            <span className="text-[10px] text-slate-400">{row.date}</span>
+            <span className="text-[10px] text-slate-400">
+              {row.created_at ? formatWIB(row.created_at, 'date') : row.date}
+            </span>
           </div>
         </div>
       ),

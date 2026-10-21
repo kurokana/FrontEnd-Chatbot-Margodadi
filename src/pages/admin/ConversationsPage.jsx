@@ -7,6 +7,7 @@ import CategoryBadge from '../../components/admin/CategoryBadge'
 import Pagination from '../../components/admin/Pagination'
 import conversationService from '../../services/conversationService'
 import operatorService from '../../services/operatorService'
+import { formatWIB } from '../../utils/dateUtils'
 
 export default function ConversationsPage() {
   const navigate = useNavigate()
@@ -333,15 +334,7 @@ export default function ConversationsPage() {
                       <span className="flex items-center gap-1">
                         <span className="material-symbols-outlined text-xs">schedule</span>
                         <span>
-                          {conv.updated_at
-                            ? `${new Date(conv.updated_at).toLocaleDateString('id-ID', {
-                                day: 'numeric',
-                                month: 'short',
-                              })} ${new Date(conv.updated_at).toLocaleTimeString('id-ID', {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })} WIB`
-                            : '-'}
+                          {conv.updated_at ? formatWIB(conv.updated_at, 'datetime') : '-'}
                         </span>
                       </span>
                     </div>

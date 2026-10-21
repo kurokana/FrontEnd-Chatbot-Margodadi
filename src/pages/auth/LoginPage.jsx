@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 
 export default function LoginPage() {
@@ -12,6 +12,8 @@ export default function LoginPage() {
   const [showHelpModal, setShowHelpModal] = useState(false)
 
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const reason = searchParams.get('reason')
   const { login, isAuthenticated } = useAuth()
 
   // Redirect if already authenticated
@@ -151,6 +153,36 @@ export default function LoginPage() {
 
             {/* Main Form Card */}
             <div className="bg-slate-950/90 border border-slate-800/90 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5">
+
+              {/* Idle Timeout Notification Alert */}
+              {reason === 'idle_timeout' && (
+                <div className="p-3.5 bg-amber-950/60 border border-amber-800/60 rounded-2xl text-xs text-amber-200 flex items-start gap-2.5 animate-in fade-in">
+                  <span className="material-symbols-outlined text-base text-amber-400 shrink-0 mt-0.5">
+                    timer_off
+                  </span>
+                  <div className="flex-1 leading-snug">
+                    <p className="font-bold text-amber-300">Sesi Berakhir Otomatis (Inaktivitas &gt; 1 Jam)</p>
+                    <p className="text-[11px] text-amber-200/80 mt-0.5">
+                      Sesi aparatur Anda telah ditutup secara otomatis demi keamanan data pekon karena tidak ada aktivitas selama lebih dari 1 jam. Silakan masuk kembali.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Session Expired Generic Alert */}
+              {reason === 'session_expired' && (
+                <div className="p-3.5 bg-sky-950/60 border border-sky-800/60 rounded-2xl text-xs text-sky-200 flex items-start gap-2.5 animate-in fade-in">
+                  <span className="material-symbols-outlined text-base text-sky-400 shrink-0 mt-0.5">
+                    lock_clock
+                  </span>
+                  <div className="flex-1 leading-snug">
+                    <p className="font-bold text-sky-300">Sesi Telah Berakhir</p>
+                    <p className="text-[11px] text-sky-200/80 mt-0.5">
+                      Masa berlaku sesi login Anda telah selesai. Silakan masukkan kredensial untuk melanjutkan pekerjaan Anda.
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Error Notification Alert */}
               {errorMessage && (

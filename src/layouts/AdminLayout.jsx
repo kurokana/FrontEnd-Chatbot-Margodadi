@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import ScrollToTop from '../components/ScrollToTop'
 import AdminSidebar from '../components/admin/AdminSidebar'
+import IdleTimeoutModal from '../components/admin/IdleTimeoutModal'
 import { useAuth } from '../context/AuthContext'
+import useIdleTimeout from '../hooks/useIdleTimeout'
 import conversationService from '../services/conversationService'
 import authService from '../services/authService'
+import { formatWIB } from '../utils/dateUtils'
 
 const PAGE_TITLES = {
   '/admin': 'Dashboard',
@@ -59,7 +62,37 @@ export default function AdminLayout() {
     }
   }, [])
 
-  // Heartbeat berkala setiap 60 detik untuk menjaga status kehadiran operator (timeout 5 menit)
+  // Live Clock Server / Pekon Margodadi (WIB)
+  const [currentTimeString, setCurrentTimeString] = useState(() => formatWIB(new Date(), 'header_clock'))
+
+  useEffect(() => {
+    const clockInterval = setInterval(() => {
+      setCurrentTimeString(formatWIB(new Date(), 'header_clock'))
+    }, 1000)
+    return () => clearInterval(clockInterval)
+  }, [])
+
+  // Handler auto-logout saat inaktivitas > 1 jam
+  const handleIdleLogout = useCallback(async () => {
+    try {
+      await logout()
+    } finally {
+      navigate('/login?reason=idle_timeout')
+    }
+  }, [logout, navigate])
+
+  // Hook Idle Inactivity Tracker (60 menit timeout, 5 menit modal warning)
+  const { isWarningVisible, remainingSeconds, resetTimer, wasActiveRecently } = useIdleTimeout({
+    timeoutMs: 60 * 60 * 1000, // 60 menit
+    warningMs: 5 * 60 * 1000,  // 5 menit peringatan sebelum logout
+    onLogout: handleIdleLogout,
+    onStayLoggedIn: () => {
+      authService.heartbeat()
+    },
+    enabled: true,
+  })
+
+  // Heartbeat berkala setiap 60 detik (HANYA dikirim jika operator aktif dalam 5 menit terakhir)
   useEffect(() => {
     let isMounted = true
 
@@ -68,7 +101,10 @@ export default function AdminLayout() {
 
     const heartbeatInterval = setInterval(() => {
       if (isMounted) {
-        authService.heartbeat()
+        // Jika operator diam/idle > 5 menit, stop heartbeat agar status di DB beralih ke OFFLINE
+        if (wasActiveRecently(5 * 60 * 1000)) {
+          authService.heartbeat()
+        }
       }
     }, 60000)
 
@@ -76,7 +112,7 @@ export default function AdminLayout() {
       isMounted = false
       clearInterval(heartbeatInterval)
     }
-  }, [])
+  }, [wasActiveRecently])
 
   const handleLogout = async () => {
     await logout()
@@ -126,6 +162,12 @@ export default function AdminLayout() {
 
           {/* Top Actions & Quick HITL Alert Bell */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Live Clock Server Pekon Margodadi (WIB) */}
+            <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/90 text-slate-700 text-xs font-mono font-semibold shadow-2xs">
+              <span className="material-symbols-outlined text-sm text-primary">schedule</span>
+              <span>{currentTimeString}</span>
+            </div>
+
             {/* Quick HITL Button */}
             <Link
               to="/admin/conversations?status=NEED_HUMAN"
@@ -202,6 +244,14 @@ export default function AdminLayout() {
           </div>
         </main>
       </div>
+
+      {/* Idle Timeout Warning Modal (55 Minutes Alert, 60 Minutes Auto-Logout) */}
+      <IdleTimeoutModal
+        isOpen={isWarningVisible}
+        remainingSeconds={remainingSeconds}
+        onStayLoggedIn={resetTimer}
+        onLogoutNow={handleLogout}
+      />
     </div>
   )
 }
