@@ -11,10 +11,10 @@ export default function ChatInputBar({
 }) {
   const quickSuggestions = [
     { label: 'Syarat Surat Domisili', prompt: 'Bagaimana syarat dan cara membuat surat keterangan domisili di Pekon Margodadi?', category: 'surat', icon: 'description' },
-    { label: 'Katalog UMKM Kopi', prompt: 'Saya ingin tahu daftar produk UMKM olahan kopi robusta unggulan desa.', category: 'umkm', icon: 'storefront' },
+    // { label: 'Katalog UMKM Kopi', prompt: 'Saya ingin tahu daftar produk UMKM olahan kopi robusta unggulan desa.', category: 'umkm', icon: 'storefront' },
     { label: 'Pengajuan SKTM', prompt: 'Bagaimana syarat dan alur pembuatan Surat Keterangan Tidak Mampu (SKTM)?', category: 'surat', icon: 'assignment' },
     { label: 'Surat Izin Usaha Mikro', prompt: 'Apa saja berkas yang harus disiapkan untuk permohonan Surat Keterangan Usaha (SKU)?', category: 'surat', icon: 'badge' },
-    { label: 'Sentra Keripik Pisang', prompt: 'Apa saja produk olahan keripik pisang dan UMKM binaan pekon yang tersedia?', category: 'umkm', icon: 'shopping_bag' },
+    // { label: 'Sentra Keripik Pisang', prompt: 'Apa saja produk olahan keripik pisang dan UMKM binaan pekon yang tersedia?', category: 'umkm', icon: 'shopping_bag' },
   ]
 
   const handleKeyDown = (e) => {
